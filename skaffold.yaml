@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: skaffold/v2beta1
+apiVersion: skaffold/v2beta24
 kind: Config
 build:
   artifacts:
@@ -22,36 +22,85 @@ build:
     # https://skaffold.dev/docs/concepts/#image-repository-handling
     - image: emailservice
       context: src/emailservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/emailservice:latest
     - image: productcatalogservice
       context: src/productcatalogservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/productcatalogservice:latest
     - image: recommendationservice
       context: src/recommendationservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/recommendationservice:latest
     - image: shippingservice
       context: src/shippingservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/shippingservice:latest
     - image: checkoutservice
       context: src/checkoutservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/checkoutservice:latest
     - image: paymentservice
       context: src/paymentservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/paymentservice:latest
     - image: currencyservice
       context: src/currencyservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/currencyservice:latest
     - image: cartservice
       context: src/cartservice/src
       docker:
         dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/cartservice:latest
     - image: frontend
       context: src/frontend
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/frontend:latest
     - image: loadgenerator
       context: src/loadgenerator
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/loadgenerator:latest
     - image: adservice
       context: src/adservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/adservice:latest
   tagPolicy:
     gitCommit: {}
   local:
     useBuildkit: false
+    concurrency: 1
 deploy:
+  statusCheck: true
+  statusCheckDeadlineSeconds: 300
   kubectl:
     manifests:
       - ./kubernetes-manifests/**.yaml
+    # flags:
+    #   apply:
+    #     - --wait=true
+    #     - --record=true
 profiles:
   # "gcb" profile allows building and pushing the images
   # on Google Container Builder without requiring docker

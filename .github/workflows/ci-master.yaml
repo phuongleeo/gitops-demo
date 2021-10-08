@@ -19,9 +19,14 @@ on:
     branches:
       - master
       - release/*
+  workflow_run:
+    workflows: ["Build and Push Images"]
+    types:
+      - completed
 jobs:
   code-tests:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
