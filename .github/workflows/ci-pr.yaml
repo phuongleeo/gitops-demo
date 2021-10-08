@@ -1,0 +1,88 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: "Continuous Integration - Pull Request"
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  code-tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.201"
+      - name: Go Unit Tests
+        timeout-minutes: 10
+        run: |
+          for SERVICE in "shippingservice" "productcatalogservice"; do
+            echo "testing $SERVICE..."
+            pushd src/$SERVICE
+            go test
+            popd
+          done
+      - name: C# Unit Tests
+        timeout-minutes: 10
+        run: |
+          dotnet test src/cartservice/
+  deployment-tests:
+    runs-on: self-hosted
+    needs: code-tests
+    strategy:
+      matrix:
+        profile: ["local-code"]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+      - name: Build + Deploy PR images to GKE
+        timeout-minutes: 20
+        run: |
+          echo "Simulate deploy to temporary namespace"
+      - name: Query EXTERNAL_IP for staging
+        timeout-minutes: 5
+        run: |
+          echo "
+          NAMESPACE="pr${PR_NUMBER}"
+          get_externalIP() {
+            kubectl get service frontend-external --namespace $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          }
+          EXTERNAL_IP=$(get_externalIP)"
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Smoke Test
+        timeout-minutes: 5
+        run: |
+          echo "Check Load Generator"
+      - name: Comment EXTERNAL_IP
+        timeout-minutes: 5
+        env:
+          COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            $COMMENTS_URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            --data '{ "body": "🚲 PR staged at '"http://$(minikube ip)"'"}'
+          sleep 60
