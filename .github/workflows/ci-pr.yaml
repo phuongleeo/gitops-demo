@@ -21,6 +21,10 @@ on:
     workflows: ["Build and Push Images"]
     types:
       - completed
+permissions:
+  contents: read
+  packages: write
+  pull-requests: write
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -90,6 +94,7 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
           PR_NUMBER: ${{ github.event.pull_request.number }}
       - name: Download a tag artifact
+        continue-on-error: true
         uses: actions/download-artifact@v2
         with:
           name: skaffold-tags
