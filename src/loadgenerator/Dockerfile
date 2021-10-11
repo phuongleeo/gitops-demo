@@ -25,7 +25,6 @@ COPY requirements.txt .
 RUN pip install --prefix="/install" -r requirements.txt
 
 FROM base
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
 WORKDIR /loadgen
 
 COPY --from=builder /install /usr/local

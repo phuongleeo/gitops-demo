@@ -22,11 +22,11 @@ jobs:
           - "adservice"
           - "loadgenerator"
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
-    #   packages: write
-    #   pull-requests: write
-    #   actions: write
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+      actions: write
     steps:
       - uses: actions/checkout@v2
         with:

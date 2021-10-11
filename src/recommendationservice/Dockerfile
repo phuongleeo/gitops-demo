@@ -13,7 +13,6 @@
 # limitations under the License.
 
 FROM python:3.7-slim
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
 RUN apt-get update -qqy && \
     apt-get -qqy install wget g++ && \
     rm -rf /var/lib/apt/lists/*

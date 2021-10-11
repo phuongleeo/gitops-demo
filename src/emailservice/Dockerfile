@@ -26,7 +26,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 FROM base as final
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
 # Enable unbuffered logging
 ENV PYTHONUNBUFFERED=1
 # Enable Profiler
