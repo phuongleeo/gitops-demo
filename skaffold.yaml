@@ -38,54 +38,54 @@ build:
         dockerfile: Dockerfile
         cacheFrom:
           - gcr.io/google-samples/microservices-demo/recommendationservice:latest
-    # - image: shippingservice
-    #   context: src/shippingservice
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/shippingservice:latest
-    # - image: checkoutservice
-    #   context: src/checkoutservice
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/checkoutservice:latest
-    # - image: paymentservice
-    #   context: src/paymentservice
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/paymentservice:latest
-    # - image: currencyservice
-    #   context: src/currencyservice
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/currencyservice:latest
-    # - image: cartservice
-    #   context: src/cartservice/src
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/cartservice:latest
-    # - image: frontend
-    #   context: src/frontend
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/frontend:latest
-    # - image: loadgenerator
-    #   context: src/loadgenerator
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/loadgenerator:latest
-    # - image: adservice
-    #   context: src/adservice
-    #   docker:
-    #     dockerfile: Dockerfile
-    #     cacheFrom:
-    #       - gcr.io/google-samples/microservices-demo/adservice:latest
+    - image: shippingservice
+      context: src/shippingservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/shippingservice:latest
+    - image: checkoutservice
+      context: src/checkoutservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/checkoutservice:latest
+    - image: paymentservice
+      context: src/paymentservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/paymentservice:latest
+    - image: currencyservice
+      context: src/currencyservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/currencyservice:latest
+    - image: cartservice
+      context: src/cartservice/src
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/cartservice:latest
+    - image: frontend
+      context: src/frontend
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/frontend:latest
+    - image: loadgenerator
+      context: src/loadgenerator
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/loadgenerator:latest
+    - image: adservice
+      context: src/adservice
+      docker:
+        dockerfile: Dockerfile
+        cacheFrom:
+          - gcr.io/google-samples/microservices-demo/adservice:latest
   tagPolicy:
     gitCommit: {}
   local:
