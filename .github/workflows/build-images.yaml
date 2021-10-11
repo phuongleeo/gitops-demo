@@ -10,23 +10,23 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 jobs:
   build:
-    strategy:
-      matrix:
-        apps:
-          - "productcatalogservice"
-          - "recommendationservice"
-          - "shippingservice"
-          - "paymentservice"
-          - "currencyservice"
-          - "frontend"
-          - "adservice"
-          - "loadgenerator"
+    # strategy:
+    #   matrix:
+    #     apps:
+    #       - "productcatalogservice"
+    #       - "recommendationservice"
+    #       - "shippingservice"
+    #       - "paymentservice"
+    #       - "currencyservice"
+    #       - "frontend"
+    #       - "adservice"
+    #       - "loadgenerator"
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
-      pull-requests: write
-      actions: write
+    #   pull-requests: write
+    #   actions: write
     steps:
       - uses: actions/checkout@v2
         with:
@@ -56,11 +56,9 @@ jobs:
         uses: docker/metadata-action@v3.5.0
         with:
           labels: |
-            org.opencontainers.image.title=${{ matrix.apps }}
+            org.opencontainers.image.title=productcatalogservice
             org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/${{ matrix.apps }}
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/{{ matrix.apps }}
-          tags: |
-            type=sha,format=short
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:${{ github.sha }}
       - name: Build and push Docker image
         # timeout-minutes: 20
         # run: |
@@ -73,26 +71,14 @@ jobs:
         #   tag: ${{ github.sha }}
         uses: docker/build-push-action@v2
         with:
-          context: src/${{ matrix.apps }}
+          context: src/productcatalogservice
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.apps }}:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.apps }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:latest
           labels: |
-            org.opencontainers.image.title=${{ matrix.apps }}
-            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/${{ matrix.apps }}
-      - name: Build exclusive for cartservice
-        uses: docker/build-push-action@v2
-        with:
-          context: src/cartservice/src
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cartservice:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cartservice:latest
-          labels: |
-            org.opencontainers.image.title=cartservice
-            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/cartservice
-
+            org.opencontainers.image.title=productcatalogservice
+            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/productcatalogservice
       # - name: "Upload Artifact"
       #   uses: actions/upload-artifact@v2
       #   with:
