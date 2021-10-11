@@ -10,23 +10,10 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 jobs:
   build:
-    # strategy:
-    #   matrix:
-    #     apps:
-    #       - "productcatalogservice"
-    #       - "recommendationservice"
-    #       - "shippingservice"
-    #       - "paymentservice"
-    #       - "currencyservice"
-    #       - "frontend"
-    #       - "adservice"
-    #       - "loadgenerator"
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    #   pull-requests: write
-    #   actions: write
     steps:
       - uses: actions/checkout@v2
         with:
@@ -41,8 +28,11 @@ jobs:
           echo "✅ skaffold installed"
       - name: read secrets
         run: |
+          set -x
           echo "${PACKAGES_TOKEN}" > packages-token.txt
           cat packages-token.txt
+          echo "Print out env"
+          env
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
       - name: Log in to the Container registry
@@ -57,13 +47,16 @@ jobs:
         with:
           labels: |
             org.opencontainers.image.title=productcatalogservice
-            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/${{ matrix.apps }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/productcatalogservice
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:${{ github.sha }}
       - name: Build and push Docker image
         # timeout-minutes: 20
         # run: |
         #   skaffold build --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA:0:7} --file-output=tags.json
         # uses: hiberbee/github-action-skaffold@1.10.0
+        # run: |
+        #   echo "Show env"
+        #   env
         # with:
         #   skaffold-version: 1.33.0
         #   command: build
@@ -71,14 +64,14 @@ jobs:
         #   tag: ${{ github.sha }}
         uses: docker/build-push-action@v2
         with:
-          context: src/productcatalogservice
+          context: src/shippingservice
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/productcatalogservice:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/shippingservice:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/shippingservice:latest
           labels: |
-            org.opencontainers.image.title=productcatalogservice
-            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/productcatalogservice
+            org.opencontainers.image.title=shippingservice
+            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/shippingservice
       # - name: "Upload Artifact"
       #   uses: actions/upload-artifact@v2
       #   with:
