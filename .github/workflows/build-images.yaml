@@ -18,7 +18,6 @@ jobs:
           - "shippingservice"
           - "paymentservice"
           - "currencyservice"
-          - "cartservice"
           - "frontend"
           - "adservice"
           - "loadgenerator"
@@ -82,6 +81,18 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ matrix.apps }}
             org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/${{ matrix.apps }}
+      - name: Build exclusive for cartservice
+        uses: docker/build-push-action@v2
+        with:
+          context: src/cartservice/src
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cartservice:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cartservice:latest
+          labels: |
+            org.opencontainers.image.title=cartservice
+            org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/cartservice
+
       # - name: "Upload Artifact"
       #   uses: actions/upload-artifact@v2
       #   with:
