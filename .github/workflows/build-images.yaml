@@ -26,19 +26,6 @@ jobs:
           chmod +x skaffold && \
           sudo mv skaffold /usr/local/bin
           echo "✅ skaffold installed"
-      - name: read secrets
-        run: |
-          set -x
-          echo "${GH_TOKEN}" > packages-token.txt
-          cat packages-token.txt
-          echo "Print out env"
-          env
-          echo "COMMIT SHA: ${GITHUB_SHA:0:7}"
-          echo "GH_SHA: ${GH_SHA:0:7}"
-          echo "GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}"
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_SHA: ${{ github.sha }}
       - name: Log in to the Container registry
         uses: docker/login-action@v1
         with:
@@ -62,19 +49,4 @@ jobs:
           skaffold-version: 1.33.0
           command: build
           repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tag: latest
-        # uses: docker/build-push-action@v2
-        # with:
-        #   context: src/shippingservice
-        #   push: true
-        #   tags: |
-        #     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/shippingservice:${{ github.sha }}
-        #     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/shippingservice:latest
-        #   labels: |
-        #     org.opencontainers.image.title=shippingservice
-        #     org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY/shippingservice
-      # - name: "Upload Artifact"
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: skaffold-tags
-      #     path: tags.json
+          tag: ${{ github.sha }}
