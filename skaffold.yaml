@@ -25,67 +25,56 @@ build:
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/emailservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/emailservice:latest
     - image: productcatalogservice
       context: src/productcatalogservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/productcatalogservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/productcatalogservice:latest
     - image: recommendationservice
       context: src/recommendationservice
       docker:
         cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/recommendationservice:latest
           - ghcr.io/phuongleeo/gitops-demo/recommendationservice:builder
     - image: shippingservice
       context: src/shippingservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/shippingservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/shippingservice:latest
     - image: checkoutservice
       context: src/checkoutservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/checkoutservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/checkoutservice:latest
     - image: paymentservice
       context: src/paymentservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/paymentservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/paymentservice:latest
     - image: currencyservice
       context: src/currencyservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/currencyservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/currencyservice:latest
     - image: cartservice
       context: src/cartservice/src
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/cartservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/cartservice:latest
     - image: frontend
       context: src/frontend
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/frontend:builder
-          - ghcr.io/phuongleeo/gitops-demo/frontend:latest
     - image: loadgenerator
       context: src/loadgenerator
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/loadgenerator:builder
-          - ghcr.io/phuongleeo/gitops-demo/loadgenerator:latest
     - image: adservice
       context: src/adservice
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/adservice:builder
-          - ghcr.io/phuongleeo/gitops-demo/adservice:latest
   tagPolicy:
     gitCommit: {}
   local:

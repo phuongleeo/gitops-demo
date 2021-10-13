@@ -49,4 +49,12 @@ jobs:
           skaffold-version: 1.33.0
           command: build
           repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tag: ${{ github.sha }}
+          tag: v1
+      - name: Trigger CI-PR
+        if: success()
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: trigger-continuous-integration-pull-request
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

@@ -17,13 +17,10 @@ on:
   pull_request:
     branches:
       - master
-  workflow_run:
-    workflows: ["Build and Push Images"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [trigger-continuous-integration-pull-request]
 permissions:
   contents: read
-  packages: write
   pull-requests: write
 env:
   REGISTRY: ghcr.io
@@ -93,21 +90,14 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
           PR_NUMBER: ${{ github.event.pull_request.number }}
-      - name: Download a tag artifact
-        continue-on-error: true
-        uses: actions/download-artifact@v2
-        with:
-          name: skaffold-tags
-      - name: Display structure of downloaded files
-        run: ls -R
       - name: Smoke Test - Run Skaffold pipeline as action
         timeout-minutes: 20
         run: |
           set -x
           if [[ -a tags.json]]; then
-            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA:0:7} --build-artifacts=tags.json
+            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA} --build-artifacts=tags.json
           else
-            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA:0:7}
+            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=v1
           fi
       - name: Smoke Test
         timeout-minutes: 5
