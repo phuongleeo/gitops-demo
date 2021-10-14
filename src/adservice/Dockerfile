@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8-slim as builder
+FROM ghcr.io/phuongleeo/gitops-demo/adservice:builder as builder
 
 WORKDIR /app
 

@@ -14,7 +14,7 @@
 
 FROM node:12-alpine as base
 
-FROM base as builder
+FROM ghcr.io/phuongleeo/gitops-demo/paymentservice:builder as builder
 
 # Some packages (e.g. @google-cloud/profiler) require additional
 # deps for post-install scripts

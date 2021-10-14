@@ -14,7 +14,7 @@
 
 FROM python:3.8-slim as base
 
-FROM base as builder
+FROM ghcr.io/phuongleeo/gitops-demo/loadgenerator:builder as builder
 
 RUN apt-get -qq update \
     && apt-get install -y --no-install-recommends \

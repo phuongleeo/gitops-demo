@@ -34,7 +34,7 @@ build:
       context: src/recommendationservice
       docker:
         cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/recommendationservice:builder
+          - ghcr.io/phuongleeo/gitops-demo/recommendationservice:latest
     - image: shippingservice
       context: src/shippingservice
       docker:

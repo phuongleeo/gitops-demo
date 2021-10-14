@@ -14,7 +14,7 @@
 
 FROM python:3.7-slim as base
 
-FROM base as builder
+FROM ghcr.io/phuongleeo/gitops-demo/emailservice:builder as builder
 
 RUN apt-get -qq update \
     && apt-get install -y --no-install-recommends \

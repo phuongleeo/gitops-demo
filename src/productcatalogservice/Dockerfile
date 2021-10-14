@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.15-alpine AS builder
+FROM ghcr.io/phuongleeo/gitops-demo/productcatalogservice:builder AS builder
 RUN apk add --no-cache ca-certificates git
 RUN apk add build-base
 

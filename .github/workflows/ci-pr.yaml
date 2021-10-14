@@ -14,9 +14,6 @@
 
 name: "Continuous Integration - Pull Request"
 on:
-  pull_request:
-    branches:
-      - master
   repository_dispatch:
     types: [trigger-continuous-integration-pull-request]
 permissions:
@@ -32,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{github.event.pull_request.head.ref}}
+          ref: ${{ github.event.client_payload.sha }}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: actions/setup-dotnet@v1
         with:
@@ -94,7 +91,7 @@ jobs:
         timeout-minutes: 20
         run: |
           set -x
-          if [[ -a tags.json]]; then
+          if [[ -a tags.json ]]; then
             skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA} --build-artifacts=tags.json
           else
             skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=v1
@@ -114,5 +111,5 @@ jobs:
             $COMMENTS_URL \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            --data '{ "body": "🚲 PR staged at '"http://$(minikube ip)"'"}'
+            --data '{ "body": "🚲 PR staged at '"http://$(minikube ip)"'"}' || true
           sleep 60
