@@ -51,7 +51,7 @@ jobs:
           repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tag: v1
       - name: Trigger CI-PR
-        if: success()
+        # if: success()
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GH_TOKEN }}

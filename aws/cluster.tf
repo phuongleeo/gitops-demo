@@ -43,7 +43,7 @@ module "kubernetes" {
   worker_instance_type = "t3a.large"
   ssh_public_key       = "id_rsa.pub"
   ssh_access_cidr      = ["0.0.0.0/0"]
-  api_access_cidr      = ["118.68.140.194/32"]
+  api_access_cidr      = ["0.0.0.0/0"]
   min_worker_count     = 0
   max_worker_count     = 2
   hosted_zone          = var.hosted_zone
@@ -86,4 +86,9 @@ variable "hosted_zone" {
 }
 variable "vpc_id" {
   type = string
+}
+
+//output
+output "master_ip" {
+  value = module.kubernetes.public_ip
 }
