@@ -14,16 +14,22 @@
 
 name: "Continuous Integration - Pull Request"
 on:
-  pull_request:
-    branches:
-      - master
+  repository_dispatch:
+    types: [trigger-continuous-integration-pull-request]
+permissions:
+  contents: read
+  pull-requests: write
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 jobs:
   code-tests:
     runs-on: [ubuntu-latest]
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{github.event.pull_request.head.ref}}
+          ref: ${{ github.event.client_payload.sha }}
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: actions/setup-dotnet@v1
         with:
@@ -42,7 +48,7 @@ jobs:
         run: |
           dotnet test src/cartservice/
   deployment-tests:
-    runs-on: self-hosted
+    runs-on: [ubuntu-latest]
     needs: code-tests
     strategy:
       matrix:
@@ -53,10 +59,22 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - name: Build + Deploy PR images to GKE
+      - name: Build + Deploy PR images to minikube
         timeout-minutes: 20
         run: |
           echo "Simulate deploy to temporary namespace"
+      - uses: opsgang/ga-setup-minikube@v0.1.2
+        with:
+          minikube-version: 1.22.0
+          k8s-version: 1.21.2
+      - name: Testing
+        run: |
+          minikube config set vm-driver docker
+          minikube config set kubernetes-version v1.21.2
+          minikube start
+          minikube update-context
+          kubectl cluster-info
+          kubectl get pods -A
       - name: Query EXTERNAL_IP for staging
         timeout-minutes: 5
         run: |
@@ -69,6 +87,15 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
           PR_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Smoke Test - Run Skaffold pipeline as action
+        timeout-minutes: 20
+        run: |
+          set -x
+          if [[ -a tags.json ]]; then
+            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${GITHUB_SHA} --build-artifacts=tags.json
+          else
+            skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=v1
+          fi
       - name: Smoke Test
         timeout-minutes: 5
         run: |
@@ -84,5 +111,5 @@ jobs:
             $COMMENTS_URL \
             -H "Content-Type: application/json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            --data '{ "body": "🚲 PR staged at '"http://$(minikube ip)"'"}'
+            --data '{ "body": "🚲 PR staged at '"http://$(minikube ip)"'"}' || true
           sleep 60

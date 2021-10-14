@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8-slim as builder
+FROM ghcr.io/phuongleeo/gitops-demo/adservice:builder as builder
 
 WORKDIR /app
 
@@ -26,7 +26,6 @@ RUN chmod +x gradlew
 RUN ./gradlew installDist
 
 FROM openjdk:8-slim
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
 # Download Stackdriver Profiler Java agent
 RUN apt-get -y update && apt-get install -qqy \
     wget \

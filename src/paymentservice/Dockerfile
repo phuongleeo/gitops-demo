@@ -14,7 +14,7 @@
 
 FROM node:12-alpine as base
 
-FROM base as builder
+FROM ghcr.io/phuongleeo/gitops-demo/paymentservice:builder as builder
 
 # Some packages (e.g. @google-cloud/profiler) require additional
 # deps for post-install scripts
@@ -30,7 +30,6 @@ COPY package*.json ./
 RUN npm install --only=production
 
 FROM base
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
 RUN GRPC_HEALTH_PROBE_VERSION=v0.3.6 && \
     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
     chmod +x /bin/grpc_health_probe

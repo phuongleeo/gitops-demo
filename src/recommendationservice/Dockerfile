@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.7-slim
-LABEL org.opencontainers.image.source https://github.com/phuongleeo/gitops-demo
+FROM ghcr.io/phuongleeo/gitops-demo/recommendationservice:latest
 RUN apt-get update -qqy && \
     apt-get -qqy install wget g++ && \
     rm -rf /var/lib/apt/lists/*
