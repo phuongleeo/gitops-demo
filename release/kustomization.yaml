@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - istio-manifests.yaml
   - kubernetes-manifests.yaml
+  # - https://raw.githubusercontent.com/istio/istio/release-1.11/samples/addons/kiali.yaml
+  # - https://raw.githubusercontent.com/istio/istio/release-1.11/samples/addons/jaeger.yaml
 namespace: default
 patches:
   - target:
@@ -12,3 +14,29 @@ patches:
         path: /spec/template/spec/imagePullSecrets
         value:
         - name: ghcr
+replicas:
+  - name: frontend
+    count: 1
+  - name: loadgenerator
+    count: 1
+images:
+  - name: gcr.io/google-samples/microservices-demo/shippingservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/frontend
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/adservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/checkoutservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/currencyservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/emailservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/paymentservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/productcatalogservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/recommendationservice
+    newTag: v0.3.0
+  - name: gcr.io/google-samples/microservices-demo/shippingservice
+    newTag: v0.3.0
