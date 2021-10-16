@@ -1,4 +1,4 @@
-Inheritance from [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo) with inspiration
+Inheritance from [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo) and [gitops-istio](https://github.com/stefanprodan/gitops-istio) with inspiration
 
 <p align="center">
 <img src="src/frontend/static/icons/Hipster_HeroLogoCyan.svg" width="300" alt="Online Boutique" />
