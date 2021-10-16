@@ -61,3 +61,4 @@ spec:
   path: ./istio/gateway
   prune: true
   validation: client
+  # targetNamespace: default
