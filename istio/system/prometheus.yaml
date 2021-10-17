@@ -27,6 +27,8 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    kubeStateMetrics:
+      enabled: false
     alertmanager:
       enabled: false
     nodeExporter:
@@ -41,3 +43,26 @@ spec:
         sidecar.istio.io/inject: "false"
       service:
         servicePort: 9090
+    extraScrapeConfigs: |
+      - job_name: "istiod"
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istiod;http-monitoring
+        scrape_interval: 1m
+        scrape_timeout: 10s
+      - job_name: "envoy-stats"
+        metrics_path: /stats/prometheus
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_container_port_name]
+            action: keep
+            regex: ".*-envoy-prom"
+        scrape_interval: 1m
+        scrape_timeout: 10s
