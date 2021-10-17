@@ -87,6 +87,13 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
           PR_NUMBER: ${{ github.event.pull_request.number }}
+      - name: Install dependencies
+        timeout-minutes: 10
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          chmod +x skaffold && \
+          sudo mv skaffold /usr/local/bin
+          echo "✅ skaffold installed"
       - name: Smoke Test - Run Skaffold pipeline as action
         timeout-minutes: 20
         run: |

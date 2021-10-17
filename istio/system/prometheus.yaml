@@ -25,3 +25,13 @@ spec:
     crds: Create
   upgrade:
     crds: CreateReplace
+  values:
+    pushgateway:
+      enabled: false
+    alertmanager:
+      enabled: false
+    nodeExporter:
+      enabled: false
+    server:
+      service:
+        servicePort: 9090
