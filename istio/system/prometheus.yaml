@@ -19,6 +19,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
+      version: 14.11.0
   interval: 1h0m0s
   releaseName: prometheus
   install:
@@ -26,12 +27,17 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    pushgateway:
-      enabled: false
     alertmanager:
       enabled: false
     nodeExporter:
       enabled: false
+    pushgateway:
+      enabled: false
     server:
+      fullnameOverride: prometheus
+      persistentVolume:
+        enabled: false
+      podAnnotations:
+        sidecar.istio.io/inject: "false"
       service:
         servicePort: 9090
