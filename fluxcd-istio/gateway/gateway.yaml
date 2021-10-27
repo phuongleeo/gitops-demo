@@ -20,8 +20,6 @@ kind: Namespace
 metadata:
   labels:
     istio-injection: enabled
-    sidecar.istio.io/proxyCPULimit: "500m"
-    sidecar.istio.io/proxyMemoryLimit: "300Mi"
   name: default
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -38,7 +36,8 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "istio.aws-k8s.wizelineos.com"
+        - 'istio.aws-k8s.wizelineos.com'
+        - '*'
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -47,7 +46,8 @@ metadata:
   namespace: default
 spec:
   hosts:
-    - "istio.aws-k8s.wizelineos.com"
+    - 'istio.aws-k8s.wizelineos.com'
+    - '*'
   gateways:
     - frontend-gateway
   http:
@@ -64,8 +64,8 @@ metadata:
   namespace: default
 spec:
   hosts:
-    - "accounts.google.com" # Used to get token
-    - "*.googleapis.com"
+    - 'accounts.google.com' # Used to get token
+    - '*.googleapis.com'
   ports:
     - number: 80
       protocol: HTTP
@@ -99,12 +99,10 @@ metadata:
   namespace: default
 spec:
   hosts:
-    - "frontend.default.svc.cluster.local"
+    - 'frontend.default.svc.cluster.local'
   http:
     - route:
         - destination:
             host: frontend
             port:
               number: 80
----
-
