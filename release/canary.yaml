@@ -1,0 +1,86 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: frontend
+  namespace: default
+spec:
+  # deployment reference
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  # the maximum time in seconds for the canary deployment
+  # to make progress before it is rollback (default 600s)
+  progressDeadlineSeconds: 120
+  # HPA reference (optional)
+  autoscalerRef:
+    apiVersion: autoscaling/v2beta1
+    kind: HorizontalPodAutoscaler
+    name: frontend
+  service:
+    # container port
+    port: 80
+    # container port name or number
+    targetPort: 8080
+    # port name can be http or grpc (default http)
+    portName: http
+    gateways:
+      - frontend-gateway.default.svc.cluster.local
+    # Istio virtual service host names (optional)
+    hosts:
+      - istio.aws-k8s.wizelineos.com
+    # Istio traffic policy (optional)
+    trafficPolicy:
+      tls:
+        # use ISTIO_MUTUAL when mTLS is enabled
+        mode: DISABLE
+    # Istio retry policy (optional)
+    retries:
+      attempts: 3
+      perTryTimeout: 1s
+      retryOn: 'gateway-error,connect-failure,refused-stream'
+  # promote the canary without analysing it (default false)
+  skipAnalysis: false
+  analysis:
+    alerts:
+      - name: 'qa Discord'
+        severity: warn
+        providerRef:
+          name: on-call
+          namespace: istio-system
+    # schedule interval (default 60s)
+    interval: 60s
+    # max number of failed metric checks before rollback
+    threshold: 3
+    # max traffic percentage routed to canary
+    # percentage (0-100)
+    maxWeight: 50
+    # canary increment step
+    # percentage (0-100)
+    stepWeight: 10
+    # Istio Prometheus checks
+    metrics:
+      - name: error-rate
+        templateRef:
+          name: error-rate
+          namespace: istio-system
+        thresholdRange:
+          max: 1
+        interval: 30s
+      - name: latency
+        templateRef:
+          name: latency
+          namespace: istio-system
+        thresholdRange:
+          max: 1000
+        interval: 30s
+    # tests
+    webhooks:
+      - name: load-test
+        type: rollout
+        timeout: 15s
+        url: http://flagger-loadtester.default/
+        metadata:
+          type: cmd
+          cmd: "hey -z 1m -q 3 -c 2 -H 'X-Canary: insider' http://frontend-canary/"
+          logCmdOutput: 'true'

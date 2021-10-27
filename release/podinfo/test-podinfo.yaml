@@ -1,0 +1,101 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - 'podinfo.aws-k8s.wizelineos.com'
+---
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: podinfo
+  namespace: test
+spec:
+  # deployment reference
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  # the maximum time in seconds for the canary deployment
+  # to make progress before it is rollback (default 600s)
+  progressDeadlineSeconds: 60
+  # HPA reference (optional)
+  autoscalerRef:
+    apiVersion: autoscaling/v2beta2
+    kind: HorizontalPodAutoscaler
+    name: podinfo
+  service:
+    # service port number
+    port: 9898
+    # container port number or name (optional)
+    targetPort: 9898
+    # Istio gateways (optional)
+    gateways:
+      - public-gateway.test.svc.cluster.local
+    # Istio virtual service host names (optional)
+    hosts:
+      - podinfo.aws-k8s.wizelineos.com
+    # Istio traffic policy (optional)
+    trafficPolicy:
+      tls:
+        # use ISTIO_MUTUAL when mTLS is enabled
+        mode: DISABLE
+    # Istio retry policy (optional)
+    retries:
+      attempts: 3
+      perTryTimeout: 1s
+      retryOn: 'gateway-error,connect-failure,refused-stream'
+  analysis:
+    # A/B testing
+    # schedule interval (default 60s)
+    interval: 1m
+    # max number of failed metric checks before rollback
+    threshold: 2
+    # total number of iterations
+    iterations: 2
+    # canary match condition
+    match:
+      - headers:
+          x-canary:
+            exact: 'insider'
+      - headers:
+          cookie:
+            regex: '^(.*?;)?(type=insider)(;.*)?$'
+    metrics:
+      - name: request-success-rate
+        interval: 1m
+        # minimum req success rate (non 5xx responses)
+        # percentage (0-100)
+        thresholdRange:
+          min: 99
+      - name: request-duration
+        interval: 1m
+        # maximum req duration P99
+        # milliseconds
+        thresholdRange:
+          max: 500
+    # testing (optional)
+    webhooks:
+      - name: acceptance-test
+        type: pre-rollout
+        url: http://flagger-loadtester.test/
+        timeout: 30s
+        metadata:
+          type: bash
+          cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
+          logCmdOutput: 'true'
+      - name: load-test
+        url: http://flagger-loadtester.test/
+        timeout: 5s
+        metadata:
+          cmd: 'hey -z 1m -q 10 -c 2 -H 'Cookie: type=insider' http://podinfo-canary.test:9898/'
+          logCmdOutput: 'true'
