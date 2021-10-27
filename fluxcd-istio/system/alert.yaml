@@ -10,4 +10,3 @@ spec:
   # secret containing the webhook address (optional)
   secretRef:
     name: discord-url
-    namespace: istio-system

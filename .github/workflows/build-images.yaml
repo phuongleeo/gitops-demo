@@ -1,10 +1,10 @@
 name: Build and Push Images
 
-on:
-  push:
-    branches: [master]
-  # pull_request:
-  #   branches: [master]
+# on:
+# push:
+#   branches: [master]
+# pull_request:
+#   branches: [master]
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
