@@ -43,8 +43,8 @@ spec:
   skipAnalysis: false
   analysis:
     alerts:
-      - name: 'qa Discord'
-        severity: warn
+      - name: 'Discord'
+        severity: error
         providerRef:
           name: on-call
           namespace: istio-system

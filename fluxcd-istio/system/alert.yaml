@@ -6,7 +6,7 @@ metadata:
 spec:
   type: discord
   channel: general
-  username: pleeo
+  username: flagger
   # secret containing the webhook address (optional)
   secretRef:
     name: discord-url
