@@ -28,7 +28,7 @@ spec:
       - frontend-gateway.default.svc.cluster.local
     # Istio virtual service host names (optional)
     hosts:
-      - istio.aws-k8s.wizelineos.com
+      - '*'
     # Istio traffic policy (optional)
     trafficPolicy:
       tls:

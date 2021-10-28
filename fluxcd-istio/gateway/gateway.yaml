@@ -36,7 +36,6 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - 'istio.aws-k8s.wizelineos.com'
         - '*'
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -46,7 +45,6 @@ metadata:
   namespace: default
 spec:
   hosts:
-    - 'istio.aws-k8s.wizelineos.com'
     - '*'
   gateways:
     - frontend-gateway
