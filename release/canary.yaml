@@ -44,7 +44,7 @@ spec:
   analysis:
     alerts:
       - name: 'Discord'
-        severity: error
+        severity: info
         providerRef:
           name: on-call
           namespace: istio-system
