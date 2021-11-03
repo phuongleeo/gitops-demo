@@ -61,4 +61,19 @@ spec:
   path: ./fluxcd-istio/gateway
   prune: true
   validation: client
-  # targetNamespace: default
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: fluxcd-notifications
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: istio-gateway
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./fluxcd-istio/notifications
+  prune: true
+  validation: client
