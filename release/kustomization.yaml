@@ -20,23 +20,23 @@ replicas:
   - name: loadgenerator
     count: 1
 images:
-  - name: gcr.io/google-samples/microservices-demo/shippingservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/frontend
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/adservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/checkoutservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/currencyservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/emailservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/paymentservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/productcatalogservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/recommendationservice
-    newTag: v0.2.4
-  - name: gcr.io/google-samples/microservices-demo/shippingservice
-    newTag: v0.2.4
+  - name: gcr.io/google-samples/microservices-demo/frontend # {"$imagepolicy": "flux-system:frontend:name"}
+    newTag: v0.3.0 # {"$imagepolicy": "flux-system:frontend:tag"}
+  # - name: gcr.io/google-samples/microservices-demo/shippingservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/adservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/checkoutservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/currencyservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/emailservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/paymentservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/productcatalogservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/recommendationservice
+  #   newTag: v0.2.4
+  # - name: gcr.io/google-samples/microservices-demo/shippingservice
+  #   newTag: v0.2.4

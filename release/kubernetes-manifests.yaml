@@ -33,24 +33,24 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/emailservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/emailservice:v0.3.0
           ports:
             - containerPort: 8080
           env:
             - name: PORT
-              value: "8080"
+              value: '8080'
             # - name: DISABLE_TRACING
             #   value: "1"
             - name: DISABLE_PROFILER
-              value: "1"
+              value: '1'
           readinessProbe:
             periodSeconds: 5
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+              command: ['/bin/grpc_health_probe', '-addr=:8080']
           livenessProbe:
             periodSeconds: 5
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+              command: ['/bin/grpc_health_probe', '-addr=:8080']
           resources:
             requests:
               cpu: 100m
@@ -88,30 +88,30 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/checkoutservice:v0.3.0
           ports:
             - containerPort: 5050
           readinessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:5050"]
+              command: ['/bin/grpc_health_probe', '-addr=:5050']
           livenessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:5050"]
+              command: ['/bin/grpc_health_probe', '-addr=:5050']
           env:
             - name: PORT
-              value: "5050"
+              value: '5050'
             - name: PRODUCT_CATALOG_SERVICE_ADDR
-              value: "productcatalogservice:3550"
+              value: 'productcatalogservice:3550'
             - name: SHIPPING_SERVICE_ADDR
-              value: "shippingservice:50051"
+              value: 'shippingservice:50051'
             - name: PAYMENT_SERVICE_ADDR
-              value: "paymentservice:50051"
+              value: 'paymentservice:50051'
             - name: EMAIL_SERVICE_ADDR
-              value: "emailservice:5000"
+              value: 'emailservice:5000'
             - name: CURRENCY_SERVICE_ADDR
-              value: "currencyservice:7000"
+              value: 'currencyservice:7000'
             - name: CART_SERVICE_ADDR
-              value: "cartservice:7070"
+              value: 'cartservice:7070'
           # - name: DISABLE_STATS
           #   value: "1"
           # - name: DISABLE_TRACING
@@ -158,22 +158,22 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.3.0
           ports:
             - containerPort: 8080
           readinessProbe:
             periodSeconds: 5
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+              command: ['/bin/grpc_health_probe', '-addr=:8080']
           livenessProbe:
             periodSeconds: 5
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:8080"]
+              command: ['/bin/grpc_health_probe', '-addr=:8080']
           env:
             - name: PORT
-              value: "8080"
+              value: '8080'
             - name: PRODUCT_CATALOG_SERVICE_ADDR
-              value: "productcatalogservice:3550"
+              value: 'productcatalogservice:3550'
           # - name: DISABLE_TRACING
           #   value: "1"
           # - name: DISABLE_PROFILER
@@ -214,51 +214,51 @@ spec:
       labels:
         app: frontend
       annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        sidecar.istio.io/rewriteAppHTTPProbers: 'true'
     spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/frontend:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/frontend:v0.3.0
           ports:
             - containerPort: 8080
           readinessProbe:
             initialDelaySeconds: 10
             httpGet:
-              path: "/_healthz"
+              path: '/_healthz'
               port: 8080
               httpHeaders:
-                - name: "Cookie"
-                  value: "shop_session-id=x-readiness-probe"
+                - name: 'Cookie'
+                  value: 'shop_session-id=x-readiness-probe'
           livenessProbe:
             initialDelaySeconds: 10
             httpGet:
-              path: "/_healthz"
+              path: '/_healthz'
               port: 8080
               httpHeaders:
-                - name: "Cookie"
-                  value: "shop_session-id=x-liveness-probe"
+                - name: 'Cookie'
+                  value: 'shop_session-id=x-liveness-probe'
           env:
             - name: PORT
-              value: "8080"
+              value: '8080'
             - name: PRODUCT_CATALOG_SERVICE_ADDR
-              value: "productcatalogservice:3550"
+              value: 'productcatalogservice:3550'
             - name: CURRENCY_SERVICE_ADDR
-              value: "currencyservice:7000"
+              value: 'currencyservice:7000'
             - name: CART_SERVICE_ADDR
-              value: "cartservice:7070"
+              value: 'cartservice:7070'
             - name: RECOMMENDATION_SERVICE_ADDR
-              value: "recommendationservice:8080"
+              value: 'recommendationservice:8080'
             - name: SHIPPING_SERVICE_ADDR
-              value: "shippingservice:50051"
+              value: 'shippingservice:50051'
             - name: CHECKOUT_SERVICE_ADDR
-              value: "checkoutservice:5050"
+              value: 'checkoutservice:5050'
             - name: AD_SERVICE_ADDR
-              value: "adservice:9555"
+              value: 'adservice:9555'
             # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
             # # When not set, defaults to "local" unless running in GKE, otherwies auto-sets to gcp
             - name: ENV_PLATFORM
-              value: "local"
+              value: 'local'
           # - name: DISABLE_TRACING
           #   value: "1"
           # - name: DISABLE_PROFILER
@@ -316,18 +316,18 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/paymentservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/paymentservice:v0.3.0
           ports:
             - containerPort: 50051
           env:
             - name: PORT
-              value: "50051"
+              value: '50051'
           readinessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:50051"]
+              command: ['/bin/grpc_health_probe', '-addr=:50051']
           livenessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:50051"]
+              command: ['/bin/grpc_health_probe', '-addr=:50051']
           resources:
             requests:
               cpu: 100m
@@ -366,12 +366,12 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.3.0
           ports:
             - containerPort: 3550
           env:
             - name: PORT
-              value: "3550"
+              value: '3550'
           # - name: DISABLE_STATS
           #   value: "1"
           # - name: DISABLE_TRACING
@@ -382,10 +382,10 @@ spec:
           #   value: "jaeger-collector:14268"
           readinessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:3550"]
+              command: ['/bin/grpc_health_probe', '-addr=:3550']
           livenessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:3550"]
+              command: ['/bin/grpc_health_probe', '-addr=:3550']
           resources:
             requests:
               cpu: 100m
@@ -424,12 +424,12 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/cartservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/cartservice:v0.3.0
           ports:
             - containerPort: 7070
           env:
             - name: REDIS_ADDR
-              value: "redis-cart:6379"
+              value: 'redis-cart:6379'
           resources:
             requests:
               cpu: 200m
@@ -441,13 +441,13 @@ spec:
             initialDelaySeconds: 15
             exec:
               command:
-                ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
+                ['/bin/grpc_health_probe', '-addr=:7070', '-rpc-timeout=5s']
           livenessProbe:
             initialDelaySeconds: 15
             periodSeconds: 10
             exec:
               command:
-                ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
+                ['/bin/grpc_health_probe', '-addr=:7070', '-rpc-timeout=5s']
 ---
 apiVersion: v1
 kind: Service
@@ -476,7 +476,7 @@ spec:
       labels:
         app: loadgenerator
       annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        sidecar.istio.io/rewriteAppHTTPProbers: 'true'
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -496,15 +496,15 @@ spec:
           image: busybox:latest
           env:
             - name: FRONTEND_ADDR
-              value: "frontend:80"
+              value: 'frontend:80'
       containers:
         - name: main
-          image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.3.0
           env:
             - name: FRONTEND_ADDR
-              value: "frontend:80"
+              value: 'frontend:80'
             - name: USERS
-              value: "10"
+              value: '10'
           resources:
             requests:
               cpu: 300m
@@ -530,13 +530,13 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/currencyservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/currencyservice:v0.3.0
           ports:
             - name: grpc
               containerPort: 7000
           env:
             - name: PORT
-              value: "7000"
+              value: '7000'
           # - name: DISABLE_TRACING
           #   value: "1"
           # - name: DISABLE_PROFILER
@@ -545,10 +545,10 @@ spec:
           #   value: "1"
           readinessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:7000"]
+              command: ['/bin/grpc_health_probe', '-addr=:7000']
           livenessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:7000"]
+              command: ['/bin/grpc_health_probe', '-addr=:7000']
           resources:
             requests:
               cpu: 100m
@@ -586,12 +586,12 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/shippingservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/shippingservice:v0.3.0
           ports:
             - containerPort: 50051
           env:
             - name: PORT
-              value: "50051"
+              value: '50051'
           # - name: DISABLE_STATS
           #   value: "1"
           # - name: DISABLE_TRACING
@@ -603,10 +603,10 @@ spec:
           readinessProbe:
             periodSeconds: 5
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:50051"]
+              command: ['/bin/grpc_health_probe', '-addr=:50051']
           livenessProbe:
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:50051"]
+              command: ['/bin/grpc_health_probe', '-addr=:50051']
           resources:
             requests:
               cpu: 100m
@@ -698,12 +698,12 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/adservice:v0.2.4
+          image: gcr.io/google-samples/microservices-demo/adservice:v0.3.0
           ports:
             - containerPort: 9555
           env:
             - name: PORT
-              value: "9555"
+              value: '9555'
           # - name: DISABLE_STATS
           #   value: "1"
           # - name: DISABLE_TRACING
@@ -721,12 +721,12 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 15
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:9555"]
+              command: ['/bin/grpc_health_probe', '-addr=:9555']
           livenessProbe:
             initialDelaySeconds: 20
             periodSeconds: 15
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:9555"]
+              command: ['/bin/grpc_health_probe', '-addr=:9555']
 ---
 apiVersion: v1
 kind: Service
