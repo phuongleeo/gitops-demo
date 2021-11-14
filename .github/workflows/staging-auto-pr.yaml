@@ -6,7 +6,7 @@ on:
 
 jobs:
   pull-request:
-    name: Open PR to main
+    name: Open PR to master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,9 +15,22 @@ jobs:
       - uses: repo-sync/pull-request@v2
         name: pull-request
         with:
-          destination_branch: 'main'
-          pr_title: 'Pulling ${{ github.ref }} into main'
+          destination_branch: 'master'
+          pr_title: 'Pulling ${{ github.ref }} into master'
           pr_body: '👑 *An automated PR*'
           pr_reviewer: 'phuongleeo'
           pr_draft: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Comment on PR
+      #   timeout-minutes: 5
+      #   env:
+      #     COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     curl \
+      #       -X POST \
+      #       $COMMENTS_URL \
+      #       -H "Content-Type: application/json" \
+      #       -H "Authorization: token $GITHUB_TOKEN" \
+      #       --data '{ "body": "🚲 PR staged at '"https://qa.dev"'"}'
+      #     sleep 60

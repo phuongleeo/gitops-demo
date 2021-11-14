@@ -1,0 +1,66 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 'QA Deployment'
+on:
+  repository_dispatch:
+    types: [trigger-deploy-qa]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  deployment-qa:
+    runs-on: [ubuntu-latest]
+    environment:
+      name: staging
+    strategy:
+      matrix:
+        profile: ['local-code']
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.sha }}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+      - name: Build + Deploy PR images to minikube
+        timeout-minutes: 20
+        run: |
+          echo "Simulate deploy to temporary namespace"
+      - uses: opsgang/ga-setup-minikube@v0.1.2
+        with:
+          minikube-version: 1.22.0
+          k8s-version: 1.21.2
+      - name: Testing
+        run: |
+          minikube config set vm-driver docker
+          minikube config set kubernetes-version v1.21.2
+          minikube start
+          minikube update-context
+          kubectl cluster-info
+          kubectl get pods -A
+      - name: Install dependencies
+        timeout-minutes: 10
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          chmod +x skaffold && \
+          sudo mv skaffold /usr/local/bin
+          echo "✅ skaffold installed"
+      - name: Smoke Test - Run Skaffold pipeline as action
+        timeout-minutes: 20
+        run: |
+          skaffold deploy --default-repo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --tag=${{ github.event.client_payload.image_tag }}
+      - name: Smoke Test
+        timeout-minutes: 5
+        run: |
+          echo "Check Load Generator"

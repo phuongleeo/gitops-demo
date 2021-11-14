@@ -20,61 +20,61 @@ build:
     # must provide a "default repo" using one of the methods described
     # here:
     # https://skaffold.dev/docs/concepts/#image-repository-handling
-    - image: emailservice
-      context: src/emailservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/emailservice:builder
-    - image: productcatalogservice
-      context: src/productcatalogservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/productcatalogservice:builder
-    - image: recommendationservice
-      context: src/recommendationservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/recommendationservice:latest
-    - image: shippingservice
-      context: src/shippingservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/shippingservice:builder
-    - image: checkoutservice
-      context: src/checkoutservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/checkoutservice:builder
-    - image: paymentservice
-      context: src/paymentservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/paymentservice:builder
-    - image: currencyservice
-      context: src/currencyservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/currencyservice:builder
-    - image: cartservice
-      context: src/cartservice/src
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/cartservice:builder
     - image: frontend
       context: src/frontend
       docker:
         cacheFrom:
           - ghcr.io/phuongleeo/gitops-demo/frontend:builder
-    - image: loadgenerator
-      context: src/loadgenerator
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/loadgenerator:builder
-    - image: adservice
-      context: src/adservice
-      docker:
-        cacheFrom:
-          - ghcr.io/phuongleeo/gitops-demo/adservice:builder
+    # - image: emailservice
+    #   context: src/emailservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/emailservice:builder
+    # - image: productcatalogservice
+    #   context: src/productcatalogservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/productcatalogservice:builder
+    # - image: recommendationservice
+    #   context: src/recommendationservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/recommendationservice:latest
+    # - image: shippingservice
+    #   context: src/shippingservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/shippingservice:builder
+    # - image: checkoutservice
+    #   context: src/checkoutservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/checkoutservice:builder
+    # - image: paymentservice
+    #   context: src/paymentservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/paymentservice:builder
+    # - image: currencyservice
+    #   context: src/currencyservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/currencyservice:builder
+    # - image: cartservice
+    #   context: src/cartservice/src
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/cartservice:builder
+    # - image: loadgenerator
+    #   context: src/loadgenerator
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/loadgenerator:builder
+    # - image: adservice
+    #   context: src/adservice
+    #   docker:
+    #     cacheFrom:
+    #       - ghcr.io/phuongleeo/gitops-demo/adservice:builder
   tagPolicy:
     gitCommit: {}
   local:
