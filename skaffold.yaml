@@ -78,7 +78,7 @@ build:
   tagPolicy:
     gitCommit: {}
   local:
-    useBuildkit: false
+    useBuildkit: true
     concurrency: 1
 deploy:
   statusCheck: true
