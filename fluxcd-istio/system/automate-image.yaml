@@ -16,8 +16,10 @@ metadata:
   name: frontend
   namespace: flux-system
 spec:
+  imageRepositoryRef:
+    name: frontend
   filterTags:
-    pattern: '^prod-[a-fA-F0-9]+-(?P<bid>.*)'
+    pattern: '^prod-[a-fA-F0-9]+-(?P<bid>[0-9]+)'
     extract: '$bid'
   policy:
     numerical:
