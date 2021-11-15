@@ -52,6 +52,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: checkout
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Log in to the Container registry
@@ -67,7 +70,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=frontend
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/frontend
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:prod-${{ github.sha }}-{{ github.run_number }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:prod-${{ steps.vars.outputs.sha_short }}-${{ github.run_number }}
       - name: Build and push Docker image
         # timeout-minutes: 20
         # run: |
@@ -77,7 +80,11 @@ jobs:
           skaffold-version: 1.33.0
           command: build
           repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tag: prod-${{ github.sha }}-{{ github.run_number }}
+          tag: prod-${{ steps.vars.outputs.sha_short }}-${{ github.run_number }}
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          GIT_SHORT_SHA: '${COMMIT_SHA:0:7}'
+          RUN_ID: ${{ github.run_number }}
       - name: Trigger deploy QA
         # if: success()
         uses: peter-evans/repository-dispatch@v1
@@ -85,4 +92,4 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ github.repository }}
           event-type: trigger-deploy-qa
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "image_tag": "prod-${{ github.sha }}-{{ github.run_number }}"}'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "image_tag": "prod-${{ steps.vars.outputs.sha_short }}-${{ github.run_number }}"}'
