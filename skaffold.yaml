@@ -85,7 +85,7 @@ deploy:
   statusCheckDeadlineSeconds: 300
   kubectl:
     manifests:
-      - ./kubernetes-manifests/**.yaml
+      - ./release/podinfo/podinfo-deployment.yaml
     # flags:
     #   apply:
     #     - --wait=true
