@@ -71,6 +71,15 @@ jobs:
             org.opencontainers.image.title=frontend
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/frontend
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:prod-${{ steps.vars.outputs.sha_short }}-${{ github.run_number }}
+      - name: Build and push Frontend Builder image
+        uses: docker/build-push-action@v2
+        with:
+          context: src/frontend
+          push: true
+          target: builder
+          tags: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:builder'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Build and push Docker image
         # timeout-minutes: 20
         # run: |
