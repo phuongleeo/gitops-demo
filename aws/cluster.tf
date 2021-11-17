@@ -36,7 +36,7 @@ data "aws_subnet" "private" {
 }
 module "kubernetes" {
   source               = "scholzj/kubernetes/aws"
-  version              = "1.14.0"
+  version              = "1.14.1"
   aws_region           = data.aws_region.current.name
   cluster_name         = "aws-k8s"
   master_instance_type = "t3a.medium"
