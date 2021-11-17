@@ -47,5 +47,5 @@ spec:
     push:
       branch: staging
   update:
-    path: ./release
+    path: ./cluster
     strategy: Setters
