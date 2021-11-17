@@ -39,6 +39,10 @@ spec:
       namespace: istio-system
     - apiVersion: apps/v1
       kind: Deployment
+      name: frontend
+      namespace: default
+    - apiVersion: apps/v1
+      kind: Deployment
       name: prometheus
       namespace: istio-system
     - apiVersion: apps/v1
