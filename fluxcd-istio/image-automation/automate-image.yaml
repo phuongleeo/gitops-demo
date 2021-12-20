@@ -52,5 +52,5 @@ spec:
     push:
       branch: master
   update:
-    path: ./release/kustomization.yaml
+    path: ./release
     strategy: Setters

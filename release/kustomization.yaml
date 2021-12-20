@@ -20,7 +20,8 @@ replicas:
   - name: loadgenerator
     count: 1
 images:
-  - name: gcr.io/google-samples/microservices-demo/frontend # {"$imagepolicy": "flux-system:frontend:name"}
+  - name: gcr.io/google-samples/microservices-demo/frontend
+    newName: ghcr.io/phuongleeo/gitops-demo/frontend # {"$imagepolicy": "flux-system:frontend:name"}
     newTag: v0.3.0 # {"$imagepolicy": "flux-system:frontend:tag"}
   # - name: gcr.io/google-samples/microservices-demo/shippingservice
   #   newTag: v0.2.4
