@@ -19,6 +19,9 @@ on:
 permissions:
   contents: read
   pull-requests: write
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 jobs:
   deployment-qa:
     runs-on: [ubuntu-latest]
