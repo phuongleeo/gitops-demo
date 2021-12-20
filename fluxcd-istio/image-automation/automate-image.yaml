@@ -22,7 +22,7 @@ metadata:
 spec:
   imageRepositoryRef:
     name: frontend
-    namespace: default
+    namespace: flux-system
   filterTags:
     pattern: '^prod-[a-fA-F0-9]+-(?P<bid>[0-9]+)'
     extract: '$bid'
@@ -52,5 +52,5 @@ spec:
     push:
       branch: master
   update:
-    path: ./cluster
+    path: ./release/kustomization.yaml
     strategy: Setters
