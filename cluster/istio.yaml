@@ -81,3 +81,20 @@ spec:
   path: ./fluxcd-istio/notifications
   prune: true
   validation: client
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: image-automation
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: fluxcd-notifications
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./fluxcd-istio/image-automation
+  prune: true
+  validation: client
