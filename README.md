@@ -1,5 +1,19 @@
 Inheritance from [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo) and [gitops-istio](https://github.com/stefanprodan/gitops-istio) with inspiration
 
+Installation:
+
+```shell
+flux bootstrap github \
+  --owner=phuongleeo \
+  --repository=gitops-demo \
+  --path=cluster \
+  --personal=true \
+  --branch=master \
+  --components-extra=image-reflector-controller,image-automation-controller \
+  --read-write-key \
+  --personal
+```
+
 <p align="center">
 <img src="src/frontend/static/icons/Hipster_HeroLogoCyan.svg" width="300" alt="Online Boutique" />
 </p>
